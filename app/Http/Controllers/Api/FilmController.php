@@ -15,7 +15,38 @@ class FilmController extends Controller
 
         return response()->json([
             'films' => $totalFilms,
-            'status' => 200
+            'status' => 200,
+            'msg' => 'Tous les films ont été recupérés'
         ]);
+    }
+
+    public function store(Request $request, Film $film)
+    {
+        $url = $request->url;
+        $titre = $request->titre;
+        $description = $request->description;
+
+        if (!empty($url) && !empty($titre)) {
+            $film->url = $url;
+            $film->titre = $titre;
+            $film->description = $description;
+
+            $film->save();
+
+            return response()->json(
+                [
+                    'film' => $film,
+                    'status' => 200,
+                    'msg' => 'Insérer avec succès'
+                ]
+            );
+        } else {
+            return response()->json(
+                [
+                    'msg' => 'Veuillez remplir tous les champs',
+                    'status' => 400
+                ]
+            );
+        }
     }
 }
